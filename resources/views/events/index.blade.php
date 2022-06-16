@@ -18,7 +18,9 @@
             <div class="alert alert-success"> {{ Session::get('successMsg') }}</div>
         @endif
         <div class="row my-3">
+            @if(Gate::allows('manage-events'))
             <a href="{{ route('events.create') }}" class="btn  btn-outline-success col-2">Add a new event</a>
+            @endif
                 <div class="col-8"></div>
             <form class="form-inline ml-auto col-2" type="GET" action="{{ url('/events/search')}}">
                 <div class="col-6 input-group">
