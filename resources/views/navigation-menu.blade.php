@@ -30,7 +30,11 @@
                         </x-jet-nav-link>
                     </div>
                 @endif
+<<<<<<< HEAD
                 @if (Gate::allows('manage-events') || Gate::allows('tl-manage-events'))
+=======
+                @if (Gate::allows('manage-events'))
+>>>>>>> ac3d2b720fe86ca6061eeb79293789aad25d7afc
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-jet-nav-link href="{{ route('events') }}" :active="request()->routeIs('events')">
                             {{ __('Events') }}
