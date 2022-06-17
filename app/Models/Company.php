@@ -23,4 +23,8 @@ class Company extends Model
     public function status() {
         return $this->hasMany(Status::class);
     }
+
+    public function contact(){
+        return $this->hasMany(Contact::class);
+    }
 }
