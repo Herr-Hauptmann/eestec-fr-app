@@ -83,13 +83,13 @@
                             <p class="title">Contact no.{{ $loop->index + 1 }}</p>
                             <div class="col-4"><input type="text" name="contactName-{{ $loop->index + 1 }}"
                                     class="form-control name"
-                                    value="{{ old('contactName-' . $loop->index + 1) ?? $contact->name }}"></div>
+                                    value="{{ old('contactName-' . ($loop->index + 1)) ?? $contact->name }}"></div>
                             <div class="col-4"><input type="text" name="contactEmail-{{ $loop->index + 1 }}"
                                     class="form-control email"
-                                    value="{{ old('contactEmail-' . $loop->index + 1) ?? $contact->email }}"></div>
+                                    value="{{ old('contactEmail-' . ($loop->index + 1)) ?? $contact->email }}"></div>
                             <div class="col-3"><input type="text"
                                     name="contactPhoneNumber-{{ $loop->index + 1 }}" class="form-control phone"
-                                    value="{{ old('contactPhoneNumber-' . $loop->index + 1) ?? $contact->number }}">
+                                    value="{{ old('contactPhoneNumber-' . ($loop->index + 1)) ?? $contact->number }}">
                             </div>
                             <div class="col-1 my-auto delete-btn"><button type="button" class="ml-auto close"><span
                                         aria-hidden="true">×</span></button></div>
