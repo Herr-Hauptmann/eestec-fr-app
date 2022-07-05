@@ -3,7 +3,13 @@ if (addButton != null)
 {
     addButton.addEventListener("click", addCompanyRow);
 }
-let counter = 1;
+let counter = document.getElementsByClassName('title').length+1;
+let existingDeletes = document.getElementsByClassName('delete-btn');
+Array.from(existingDeletes).forEach(element => {
+    element.addEventListener('click', ()=>izbrisiKontakt(element));
+});
+
+
 function addCompanyRow()
 {
     let contacts = document.getElementById("contacts");
@@ -50,6 +56,7 @@ function addCompanyRow()
         let xDiv = document.createElement("div");
         xDiv.classList.add("col-1");
         xDiv.classList.add("my-auto");
+        xDiv.classList.add("delete-btn");
         let xButton = document.createElement("button");
         xButton.type="button";
         xButton.classList.add("ml-auto");

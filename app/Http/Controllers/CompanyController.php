@@ -163,17 +163,48 @@ class CompanyController extends Controller
             'description' => 'nullable|string',
             'comment' => 'nullable|string'
         ]);
-
+        //Update all details for the company table
         $editedCompany = Company::find($id);
         $editedCompany->name = $request->name;
         $editedCompany->address = $request->address;
         $editedCompany->website = $request->website;
         $editedCompany->description = $request->description;
         $editedCompany->comment = $request->comment;
-        $editedCompany->contact_email = $request->contact_email;
-        $editedCompany->contact_phone = $request->contact_phone;
-        $editedCompany->contact_person = $request->contact_person;
         $editedCompany->update();
+
+        //Delete all old Contact rows
+        $companyContacts = Contact::where('company_id', $id)->get();
+        foreach($companyContacts as $contact)
+            Contact::destroy($contact->id);
+
+        
+        //Add new Company contacts
+        $contacts = $request->except(['name', 'address' , 'website', 'description', 'comment', '_token']); 
+        for ($i = 1; $i <= sizeof($contacts)/3; $i++) {
+            $nameFieldName = "contactName-".$i;
+            $emailFieldName = "contactEmail-".$i;
+            $numberFieldName = "contactPhoneNumber-".$i;
+
+            $request->validate([
+                $nameFieldName => 'required|string',
+                $emailFieldName => 'nullable|email',
+                $numberFieldName => 'nullable|string'
+            ]);
+        }
+        //Separate loop because we need to first validate everything before saving the contacts
+        for ($i = 1; $i <= sizeof($contacts)/3; $i++) {
+            $nameFieldName = "contactName-".$i;
+            $emailFieldName = "contactEmail-".$i;
+            $numberFieldName = "contactPhoneNumber-".$i;
+
+            $contact = new Contact();
+            $contact->name = $contacts[$nameFieldName];
+            $contact->email = $contacts[$emailFieldName];
+            $contact->number = $contacts[$numberFieldName];
+            $contact->company_id = $id;
+            $contact->save();
+        }
+
         $request->session()->flash('successMsg','You have successfully updated the company: '.$request->name.'!');
         return redirect('companies');
     }

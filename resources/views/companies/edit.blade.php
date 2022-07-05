@@ -80,18 +80,18 @@
                     <h4 class="pt-2">Contacts:</h4>
                     @foreach ($company->contact as $contact)
                         <div class="row pb-2 contact">
-                            <p>Contact no.{{ $loop->index + 1 }}</p>
+                            <p class="title">Contact no.{{ $loop->index + 1 }}</p>
                             <div class="col-4"><input type="text" name="contactName-{{ $loop->index + 1 }}"
-                                    class="form-control"
+                                    class="form-control name"
                                     value="{{ old('contactName-' . $loop->index + 1) ?? $contact->name }}"></div>
                             <div class="col-4"><input type="text" name="contactEmail-{{ $loop->index + 1 }}"
-                                    class="form-control"
+                                    class="form-control email"
                                     value="{{ old('contactEmail-' . $loop->index + 1) ?? $contact->email }}"></div>
                             <div class="col-3"><input type="text"
-                                    name="contactPhoneNumber-{{ $loop->index + 1 }}" class="form-control"
+                                    name="contactPhoneNumber-{{ $loop->index + 1 }}" class="form-control phone"
                                     value="{{ old('contactPhoneNumber-' . $loop->index + 1) ?? $contact->number }}">
                             </div>
-                            <div class="col-1 my-auto"><button type="button" class="ml-auto close"><span
+                            <div class="col-1 my-auto delete-btn"><button type="button" class="ml-auto close"><span
                                         aria-hidden="true">×</span></button></div>
                         </div>
                     @endforeach
@@ -109,5 +109,5 @@
             </div>
         </form>
     </div>
-    <script src="{{ asset('js/editCompanies.js') }}"></script>
+    <script src="{{ asset('js/companies.js') }}"></script>
 </x-app-layout>
