@@ -15,6 +15,7 @@ function addCompanyRow()
         
         let title = document.createElement("p");
         title.innerHTML =`Contact no.${counter}`;
+        title.classList.add('title');
         
         let name = document.createElement("div");
         name.classList.add("col-4");
@@ -22,6 +23,7 @@ function addCompanyRow()
         nameInput.type="text";
         nameInput.name=`contactName-${counter}`;
         nameInput.classList.add("form-control");
+        nameInput.classList.add("name");
         nameInput.placeholder="Contact name";
         name.appendChild(nameInput);
         
@@ -31,6 +33,7 @@ function addCompanyRow()
         emailInput.type="text";
         emailInput.name=`contactEmail-${counter}`;
         emailInput.classList.add("form-control");
+        emailInput.classList.add("email");
         emailInput.placeholder="Email address";
         email.appendChild(emailInput);
         
@@ -40,6 +43,7 @@ function addCompanyRow()
         numberInput.type="text";
         numberInput.name=`contactPhoneNumber-${counter}`;
         numberInput.classList.add("form-control");
+        numberInput.classList.add("phone");
         numberInput.placeholder="Telephone number";
         number.appendChild(numberInput);
 
@@ -73,4 +77,22 @@ function addCompanyRow()
 
 function izbrisiKontakt(node){
     node.parentNode.parentNode.removeChild(node.parentNode);
+    counter--;
+    //Buduci da ne znamo koji smo node po redu izbrisali, buduci da se moze izbrisati neki u sredni sto nam kvari koncept
+    //Ponovno numeriramo id-eve ovih input polja
+    restartujIdeve();
+}
+
+function restartujIdeve(){
+    let titles = document.getElementsByClassName('title');
+    let names = document.getElementsByClassName('name');
+    let emails = document.getElementsByClassName('email');
+    let phones = document.getElementsByClassName('phone');
+
+    for(let i = 0; i < titles.length; i++){
+        titles[i].innerHTML = `Contact no.${i+1}`;
+        names[i].name = `contactName-${i+1}`;
+        emails[i].name=`contactEmail-${i+1}`;
+        phones[i].name=`contactPhoneNumber-${i+1}`;
+    }
 }
