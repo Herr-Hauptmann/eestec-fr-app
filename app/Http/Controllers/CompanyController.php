@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Contact;
 use App\Models\Status;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+
+use DB;
 
 class CompanyController extends Controller
 {
@@ -49,15 +52,14 @@ class CompanyController extends Controller
         if (! Gate::allows('manage-companies')) {
             abort(403);
         }
+
+        //Validate and create company
         $request->validate([
             'name' => 'required|string',
             'address' => 'nullable|string',
             'website' => 'nullable|string',
             'description' => 'nullable|string',
-            'comment' => 'nullable|string',
-            'contact_email' => 'nullable|email',
-            'contact_phone' => 'nullable|alpha_num',
-            'contact_person' => 'nullable|string'
+            'comment' => 'nullable|string'
         ]);
 
         $company = new Company();
@@ -66,13 +68,41 @@ class CompanyController extends Controller
         $company->website = $request->website;
         $company->description = $request->description;
         $company->comment = $request->comment;
-        $company->contact_email = $request->contact_email;
-        $company->contact_phone = $request->contact_phone;
-        $company->contact_person = $request->contact_person;
+
+        $nextID =DB::select("SHOW TABLE STATUS LIKE 'companies'")[0]->Auto_increment;
+
+        //Validate and create company contacts
+        $contacts = $request->except(['name', 'address' , 'website', 'description', 'comment', '_token']); 
+        for ($i = 1; $i <= sizeof($contacts)/3; $i++) {
+            $nameFieldName = "contactName-".$i;
+            $emailFieldName = "contactEmail-".$i;
+            $numberFieldName = "contactPhoneNumber-".$i;
+
+            $request->validate([
+                $nameFieldName => 'required|string',
+                $emailFieldName => 'nullable|email',
+                $numberFieldName => 'nullable|string'
+            ]);
+        }
+        
         $company->save();
+
+        //Separate loop because we need to first validate everything before saving the contacts
+        for ($i = 1; $i <= sizeof($contacts)/3; $i++) {
+            $nameFieldName = "contactName-".$i;
+            $emailFieldName = "contactEmail-".$i;
+            $numberFieldName = "contactPhoneNumber-".$i;
+
+            $contact = new Contact();
+            $contact->name = $contacts[$nameFieldName];
+            $contact->email = $contacts[$emailFieldName];
+            $contact->number = $contacts[$numberFieldName];
+            $contact->company_id = $nextID;
+            $contact->save();
+        }
+
         $request->session()->flash('successMsg','You have successfully added the company: '.$request->name.'!');
         return redirect('companies');
-
     }
 
     /**
@@ -95,6 +125,7 @@ class CompanyController extends Controller
         if (! (Gate::allows('manage-companies') || (Auth::user()->role_id == 3 && $assigned))) {
             abort(403);
         }
+
         return view('companies.show', compact('company', 'statuses'));
     }
 
@@ -130,22 +161,50 @@ class CompanyController extends Controller
             'address' => 'nullable|string',
             'website' => 'nullable|string',
             'description' => 'nullable|string',
-            'comment' => 'nullable|string',
-            'contact_email' => 'nullable|email',
-            'contact_phone' => 'nullable|alpha_num',
-            'contact_person' => 'nullable|string'
+            'comment' => 'nullable|string'
         ]);
-
+        //Update all details for the company table
         $editedCompany = Company::find($id);
         $editedCompany->name = $request->name;
         $editedCompany->address = $request->address;
         $editedCompany->website = $request->website;
         $editedCompany->description = $request->description;
         $editedCompany->comment = $request->comment;
-        $editedCompany->contact_email = $request->contact_email;
-        $editedCompany->contact_phone = $request->contact_phone;
-        $editedCompany->contact_person = $request->contact_person;
         $editedCompany->update();
+
+        //Delete all old Contact rows
+        $companyContacts = Contact::where('company_id', $id)->get();
+        foreach($companyContacts as $contact)
+            Contact::destroy($contact->id);
+
+        
+        //Add new Company contacts
+        $contacts = $request->except(['name', 'address' , 'website', 'description', 'comment', '_token']); 
+        for ($i = 1; $i <= sizeof($contacts)/3; $i++) {
+            $nameFieldName = "contactName-".$i;
+            $emailFieldName = "contactEmail-".$i;
+            $numberFieldName = "contactPhoneNumber-".$i;
+
+            $request->validate([
+                $nameFieldName => 'required|string',
+                $emailFieldName => 'nullable|email',
+                $numberFieldName => 'nullable|string'
+            ]);
+        }
+        //Separate loop because we need to first validate everything before saving the contacts
+        for ($i = 1; $i <= sizeof($contacts)/3; $i++) {
+            $nameFieldName = "contactName-".$i;
+            $emailFieldName = "contactEmail-".$i;
+            $numberFieldName = "contactPhoneNumber-".$i;
+
+            $contact = new Contact();
+            $contact->name = $contacts[$nameFieldName];
+            $contact->email = $contacts[$emailFieldName];
+            $contact->number = $contacts[$numberFieldName];
+            $contact->company_id = $id;
+            $contact->save();
+        }
+
         $request->session()->flash('successMsg','You have successfully updated the company: '.$request->name.'!');
         return redirect('companies');
     }
@@ -161,6 +220,9 @@ class CompanyController extends Controller
         if (! Gate::allows('manage-companies')) {
             abort(403);
         }
+        $companyContacts = Contact::where('company_id', $id)->get();
+        foreach($companyContacts as $contact)
+            Contact::destroy($contact->id);
         Company::destroy($id);
         session()->flash('successMsg','You have successfully deleted the company!');
         return redirect('companies');

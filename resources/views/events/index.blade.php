@@ -19,9 +19,9 @@
         @endif
         <div class="row my-3">
             @if(Gate::allows('manage-events'))
-            <a href="{{ route('events.create') }}" class="btn  btn-outline-success col-2">Add a new event</a>
+            <a href="{{ route('events.create') }}" class="btn  btn-outline-success col-2 ml-4">Add a new event</a>
             @endif
-                <div class="col-8"></div>
+                <div class="col-7"></div>
             <form class="form-inline ml-auto col-2" type="GET" action="{{ url('/events/search')}}">
                 <div class="col-6 input-group">
                     <input class="form-control col-2" type="search" name="event_search" placeholder="Search" aria-label="Search">
@@ -39,7 +39,7 @@
                     bg-success text-white
                 @endif">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6 my-auto">
                             {{$event->name}}
                         </div>
                         <div class="col-6 d-flex justify-content-end">

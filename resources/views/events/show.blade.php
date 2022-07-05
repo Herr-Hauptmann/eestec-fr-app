@@ -33,39 +33,56 @@
     {{-- Contacting status --}}
     <div class="container my-5">
         @if(Session::has('successMsg'))
-            <div class="alert alert-success"> {{ Session::get('successMsg') }}</div>
+            <div id="uspjeh">
+                <div class="alert alert-success alert-dismissible mt-3 d-flex" role="alert">
+                        {{ Session::get('successMsg') }}
+                    <button id="zatvoriUspjeh" type="button" class="ml-auto close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
         @endif
         {{-- Add the event id --}}
         @if ($event->is_active == 1)
-
-        <form class="m-5 pl-5" action="{{ route('status.store') }}" method="POST" enctype="multipart/form-data">
-            <div class="row my-3 border rounded border-dark p-3 justify-content-around">
-                @csrf
-                <input hidden type="text" id="event_id" value="{{$event->id}}" name="event_id">
-                <div class="col-12 col-md-4">
-                    <label for="company_id">Company:</label>
-                    <select class="form-select" aria-label="Default select example" id="company_id" name="company_id">
-                        @foreach ($companies as $company)
-                        <option value="{{$company->id}}">{{$company->name}}</option>
-                        @endforeach
-                    </select>
-
+            @if($companies->count() == 0)
+            <div id="notifikacija">
+                <div class="alert alert-success alert-dismissible mt-3 d-flex" role="alert">
+                    Sve kompanije su dodijeljene!
+                    <button id="zatvori" type="button" class="ml-auto close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+            </div>   
+            @else
+                <form class="m-5 pl-5" action="{{ route('status.store') }}" method="POST" enctype="multipart/form-data">
+                    <div class="row my-3 border rounded border-dark p-3 justify-content-around">
+                        @csrf
+                        <input hidden type="text" id="event_id" value="{{$event->id}}" name="event_id">
+                        <div class="col-12 col-md-4">
+                            <label for="company_id">Company:</label>
+                            <select class="form-select" aria-label="Default select example" id="company_id" name="company_id">
+                                @foreach ($companies as $company)
+                                <option value="{{$company->id}}">{{$company->name}}</option>
+                                @endforeach
+                            </select>
 
-                <div class="col-12 col-md-4">
-                    <label for="user_id">Contacting member:</label>
-                    <select class="form-select" aria-label="Default select example" id="user_id" name="user_id">
-                        @foreach ($users as $user)
-                        <option value="{{$user->id}}">{{$user->name}}</option>
-                        @endforeach
-                    </select>
+                        </div>
 
-                </div>
+                        <div class="col-12 col-md-4">
+                            <label for="user_id">Contacting member:</label>
+                            <select class="form-select" aria-label="Default select example" id="user_id" name="user_id">
+                                @foreach ($users as $user)
+                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                @endforeach
+                            </select>
 
-                <button type="submit" class="btn  btn-outline-success col-6 my-2 col-md-2">Add</button>
+                        </div>
 
-            </div>
-        </form>
+                        <button type="submit" class="btn  btn-outline-success col-6 my-2 col-md-2">Add</button>
+
+                    </div>
+                </form>
+            @endif
         @endif
         <ol class="list-group">
             @foreach ($statuses as $status)
@@ -138,5 +155,5 @@
         // Call submit() method on <form id='myform'>
         document.getElementById('status_form').submit();}
     </script>
-
+    <script src="{{ asset('js/events.js')}}"></script>
 </x-app-layout>

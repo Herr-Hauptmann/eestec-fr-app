@@ -18,8 +18,8 @@
             <div class="alert alert-success"> {{ Session::get('successMsg') }}</div>
         @endif
         <div class="row my-3">
-            <a href="{{ route('companies.create') }}" class="btn  btn-outline-success col-2">Add a new company</a>
-                <div class="col-8"></div>
+            <a href="{{ route('companies.create') }}" class="btn  btn-outline-success col-2 ml-4">Add a new company</a>
+                <div class="col-7"></div>
             <form class="form-inline ml-auto col-2" type="GET" action="{{ url('/companies/search')}}">
                 <div class="col-6 input-group">
                     <input class="form-control col-2" type="search" name="company_search" placeholder="Search" aria-label="Search">
@@ -35,7 +35,7 @@
             @foreach ($companies as $company)
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6 my-auto">
                             {{$company->name}}
                         </div>
                         <div class="col-6 d-flex justify-content-end">

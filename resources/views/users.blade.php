@@ -19,7 +19,7 @@
             @foreach ($unverified as $user)
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6 my-auto">
                             {{$user->name}}
                         </div>
                         <div class="col-6 d-flex justify-content-end">
@@ -46,7 +46,7 @@
             @foreach ($users as $user)
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col-6 my-1">
+                        <div class="col-6 my-auto">
                             {{$user->name}}
                         </div>
                         <div class="col-6 d-flex justify-content-end">
