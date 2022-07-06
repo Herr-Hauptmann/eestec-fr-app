@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
             return $user->role_id == 1 || $user->role_id == 2 || $user->role_id == 3;
         });
         Gate::define('manage-statuses', function (User $user) {
-            return $user->role_id == 1 || $user->role_id == 2;
+            return $user->role_id == 1 || $user->role_id == 2 || $user->role_id ==3;
         });
         Gate::define('tl-manage-events', function (User $user) {
             return $user->role_id == 2;
