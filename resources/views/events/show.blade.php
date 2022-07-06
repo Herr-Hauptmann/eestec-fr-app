@@ -25,6 +25,9 @@
         <p>
             <b>Team Leader: </b> {{$event->teamLeader->name}}
         </p>
+        <p>
+            <b>Event deadline: </b> {{$event->deadline}}
+        </p>
 
     </div>
     @if ($event->is_active == 1)
