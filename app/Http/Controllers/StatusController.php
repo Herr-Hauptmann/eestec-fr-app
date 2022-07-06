@@ -67,12 +67,14 @@ class StatusController extends Controller
      * @param  \App\Models\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function show(Status $status)
+    public function show($id)
     {
         if (! Gate::allows('manage-statuses')) {
             abort(403);
         }
-        return Status::find($status->id);
+        dd($id);
+        $status = Status::find($id);
+        return $status;
     }
 
     /**
