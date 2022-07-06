@@ -97,6 +97,8 @@ class StatusController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        dd($request);
         if (! Gate::allows('manage-statuses')) {
             abort(403);
         }
