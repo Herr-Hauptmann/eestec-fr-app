@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/status/{id}', [StatusController::class, 'show'])->name('status.show');
 
     Route::get('/users', [RoleController::class, 'index'])->name('users');
+    Route::get('/users/search', [RoleController::class, 'search'])->name('users.search');
     Route::put('/users/{id}', [RoleController::class, 'verify'])->name('users.verify');
     Route::put('/users/update/{id}', [RoleController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [RoleController::class, 'destroy'])->name('users.destroy');

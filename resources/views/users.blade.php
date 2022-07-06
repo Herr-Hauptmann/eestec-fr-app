@@ -41,6 +41,18 @@
     </div>
     @endif
     <div class="container my-5">
+    <div class="row my-3">
+        <form class="form-inline ml-auto col-2" type="GET" action="{{ url('/users/search')}}">
+            <div class="col-6 input-group">
+                <input class="form-control col-2" type="search" name="user_search" placeholder="Search" aria-label="Search">
+                <span class="input-group-btn">
+                        <button class="btn btn-dark" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                </span>
+            </div>
+        </form>
+    </div>
     <h1>Members</h1>
         <ol class="list-group">
             @foreach ($users as $user)
