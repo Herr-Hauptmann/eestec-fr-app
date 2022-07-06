@@ -98,7 +98,7 @@
                             <form action="/status/updateStatus/{{ $status->id}}" method="post" enctype="multipart/form-data" id="status_form">
                                 @csrf
                                 @method('PUT')
-                                <select class="custom-select" id="status" name="status" onchange='submitStatusForm();'>
+                                <select class="custom-select" id="status" name="status" onchange='this.form.submit();'>
                                     <option @if ($status->status == 1) selected @endif value="1">Not contacted</option>
                                     <option @if ($status->status == 2) selected @endif value="2">Contacted, no answer</option>
                                     <option @if ($status->status == 3) selected @endif value="3">Contacted, waiting for reply</option>
@@ -112,7 +112,7 @@
                             <form action="/status/update/{{ $status->id}}" method="post" enctype="multipart/form-data" id="user_form">
                                 @csrf
                                 @method('PUT')
-                                <select class="custom-select" id="user_id" name="user_id" onchange='submitUserForm();'>
+                                <select class="custom-select" id="user_id" name="user_id" onchange='this.form.submit()'>
                                     @foreach ($users as $user)
                                     <option @if ($user->id == $status->user_id) selected @endif value="{{$user->id}}">{{$user->name}}</option>
                                     @endforeach
@@ -144,16 +144,5 @@
             @endforeach
         </ol>
     </div>
-
-    <script type='text/javascript'>
-        function submitUserForm(){
-        // Call submit() method on <form id='myform'>
-        document.getElementById('user_form').submit();}
-    </script>
-    <script type='text/javascript'>
-        function submitStatusForm(){
-        // Call submit() method on <form id='myform'>
-        document.getElementById('status_form').submit();}
-    </script>
     <script src="{{ asset('js/events.js')}}"></script>
 </x-app-layout>
