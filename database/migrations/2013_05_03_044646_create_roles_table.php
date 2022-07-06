@@ -20,7 +20,7 @@ class CreateRolesTable extends Migration
             $table->timestamps();
         });
         Artisan::call('db:seed', [
-            '--class' => 'DatabaseSeeder',
+            '--class' => 'RoleSeeder',
         ]);
     }
 

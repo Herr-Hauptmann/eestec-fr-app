@@ -97,6 +97,9 @@
                     @endforeach
                 </select>
             </div>
+            <div id="contacting-status">
+
+            </div>
             <div class="" id="show-reports">
 
             </div>
@@ -118,7 +121,15 @@
                         $('#show-reports').html(data.html);
                     }
                 });
+                $.ajax({
+                    url: `status/${status_id}`,
+                    method: "GET",
+                    success:function(data){
+                        $('#contacting-status').html(data.html);
+                    }
+                });
             });
+            
         });
     </script>
 
