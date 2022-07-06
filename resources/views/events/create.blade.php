@@ -56,6 +56,19 @@
                 @endif
                 </div>
 
+                <div class="form-group col-md-6 my-3">
+                    <label for="deadline">Deadline:</label>
+                    <input type="date" id="deadline" name="deadline"
+                        value="2022-07-22"
+                        min="2022-01-01" max="2024-12-31">
+
+                @if ($errors->first('deadline'))
+                    <div class="alert alert-danger">
+                        {{ $errors->first('deadline') }}
+                    </div>
+                @endif
+                </div>
+
                 <button type="submit" class="btn btn-primary my-1">Save</button>
             </div>
 

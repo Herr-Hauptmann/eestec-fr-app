@@ -18,6 +18,7 @@ class CreateEventsTable extends Migration
             $table->string('name');
             $table->boolean('is_active');
             $table->foreignId('user_id')->constrained()->nullable()->onDelete('cascade');
+            $table->datetime('deadline');
             $table->timestamps();
         });
     }

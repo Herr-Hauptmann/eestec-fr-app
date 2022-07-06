@@ -58,7 +58,8 @@ class EventController extends Controller
         }
         $request->validate([
             'name' => 'required|string',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
+            'deadline' => 'required|date|after:tomorrow'
         ]);
 
         $event = new Event();
@@ -69,6 +70,7 @@ class EventController extends Controller
             $event->is_active = 0;
         }
         $event->user_id = $request->user_id;
+        $event->deadline = $request->deadline;
         $event->save();
         $request->session()->flash('successMsg','You have successfully created the event: '.$event->name.'!');
         return redirect('events');
@@ -127,7 +129,8 @@ class EventController extends Controller
         }
         $request->validate([
             'name' => 'required|string',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
+            'deadline' => 'required|date|after:tomorrow'
         ]);
 
         $editedEvent = Event::find($id);
@@ -138,6 +141,7 @@ class EventController extends Controller
             $editedEvent->is_active = 0;
         }
         $editedEvent->user_id = $request->user_id;
+        $editedEvent->deadline = $request->deadline;
         $editedEvent->update();
         $request->session()->flash('successMsg','You have successfully updated the event: '.$request->name.'!');
         return redirect('events');
