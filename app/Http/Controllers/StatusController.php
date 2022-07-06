@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class StatusController extends Controller
 {
@@ -72,9 +73,10 @@ class StatusController extends Controller
         if (! Gate::allows('manage-statuses')) {
             abort(403);
         }
-        dd($id);
         $status = Status::find($id);
-        return $status;
+        $userId = Auth::id(); 
+        $html = view('status')->with(compact('status', 'userId'))->render();
+        return response()->json(['success' => true, 'prikaz_statusa' => $html]);
     }
 
     /**
