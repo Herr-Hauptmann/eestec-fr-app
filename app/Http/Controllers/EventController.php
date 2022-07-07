@@ -41,7 +41,7 @@ class EventController extends Controller
         if (! Gate::allows('manage-events')) {
             abort(403);
         }
-        $teamLeaders = User::all()->where('role_id', '2')->sortByDesc('id');
+        $teamLeaders = User::select("*")->where('role_id', '2')->orWhere('role_id', '1')->get()->sortByDesc('id');
         return view('events.create', compact('teamLeaders'));
     }
 
@@ -109,7 +109,7 @@ class EventController extends Controller
             abort(403);
         }
         $event = Event::find($id);
-        $teamLeaders = User::all()->where('role_id', '2')->sortByDesc('id');
+        $teamLeaders = User::select("*")->where('role_id', '2')->orWhere('role_id', '1')->get()->sortByDesc('id');
         return view('events.edit', compact('event', 'teamLeaders'));
 
 
