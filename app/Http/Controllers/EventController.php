@@ -157,6 +157,10 @@ class EventController extends Controller
         if (! Gate::allows('manage-events')) {
             abort(403);
         }
+        $statuses=Status::all()->where('event_id', $id);
+        foreach ($statuses as $status) {
+            $status->delete();
+        }
         Event::destroy($id);
         session()->flash('successMsg','You have successfully deleted the event!');
         return redirect('events');
