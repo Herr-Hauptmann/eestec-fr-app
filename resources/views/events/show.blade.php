@@ -87,6 +87,20 @@
                 </form>
             @endif
         @endif
+        <div class="col-6 col-md-3 d-flex justify-content-center my-2">
+            <form action="/events/{{$event->id}}/filterStatuses" method="get" enctype="multipart/form-data" id="status_form">
+                @csrf
+                @method('GET')
+                <select class="custom-select" id="filter_status" name="filter_status" onchange='this.form.submit();'>
+                    <option value="0" @if(request()->filter_status == '0') selected @endif>All statuses</option>
+                    <option value="1" @if(request()->filter_status == '1') selected @endif>Not contacted</option>
+                    <option value="2" @if(request()->filter_status == '2') selected @endif>Contacted, no answer</option>
+                    <option value="3" @if(request()->filter_status == '3') selected @endif>Contacted, waiting for reply</option>
+                    <option value="4" @if(request()->filter_status == '4') selected @endif>Accepted</option>
+                    <option value="5" @if(request()->filter_status == '5') selected @endif>Denied</option>
+                </select>
+            </form>
+        </div>
         <ol class="list-group">
             @foreach ($statuses as $status)
             <li class="list-group-item">
