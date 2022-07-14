@@ -200,4 +200,21 @@ class EventController extends Controller
 
         return view('events.show', compact('event', 'statuses', 'companies', 'users'));
     }
+
+    public function filter(Request $request, $id) {
+        if (! Gate::allows('manage-statuses')) {
+            abort(403);
+        }
+        $event = Event::find($id);
+        $statuses = Status::all()->where('event_id', $id);
+        $statusCompanies = Status::all()->where('event_id',$id)->map( function($item) {
+            return $item->company->id;
+        });
+        $companies = Company::all()->whereNotIn('id', $statusCompanies);
+        $users = User::all()->where('role_id','<','4');
+
+        if($request->user_id!="0") $statuses=Status::all()->where('user_id', $request->user_id);
+
+        return view('events.show', compact('event', 'statuses', 'companies', 'users'));
+    }
 }

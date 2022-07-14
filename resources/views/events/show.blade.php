@@ -87,12 +87,16 @@
                 </form>
             @endif
         @endif
+    <div class="row">
+        <div class="col-6 col-md-3 my-2 d-flex justify-content-center">
+            <h3>Filter companies:</h3>
+        </div>
         <div class="col-6 col-md-3 d-flex justify-content-center my-2">
             <form action="/events/{{$event->id}}/filterStatuses" method="get" enctype="multipart/form-data" id="status_form">
                 @csrf
                 @method('GET')
                 <select class="custom-select" id="filter_status" name="filter_status" onchange='this.form.submit();'>
-                    <option value="0" @if(request()->filter_status == '0') selected @endif>All statuses</option>
+                    <option value="0" @if(request()->filter_status == '0') selected @endif>Contacting info</option>
                     <option value="1" @if(request()->filter_status == '1') selected @endif>Not contacted</option>
                     <option value="2" @if(request()->filter_status == '2') selected @endif>Contacted, no answer</option>
                     <option value="3" @if(request()->filter_status == '3') selected @endif>Contacted, waiting for reply</option>
@@ -101,6 +105,19 @@
                 </select>
             </form>
         </div>
+        <div class="col-6 col-md-3 d-flex justify-content-around my-2">
+            <form action="/events/{{$event->id}}/filter" method="get" enctype="multipart/form-data" id="user_form">
+                @csrf
+                @method('GET')
+                <select class="custom-select" id="user_id" name="user_id" onchange='this.form.submit()'>
+                    <option value="0" selected="selected">Contacting member</option>
+                    @foreach ($users as $user)
+                        <option value="{{$user->id}}" @if(request()->user_id == $user->id) selected @endif>{{$user->name}}</option>
+                    @endforeach
+                </select>
+            </form>
+        </div>
+    </div>
         <ol class="list-group">
             @foreach ($statuses as $status)
             <li class="list-group-item">
