@@ -52,22 +52,24 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/events/edit/{id}', [EventController::class, 'edit']);
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
     Route::get('/events/{id}', [EventController::class, 'show']);
+    Route::get('/events/{id}/filterStatuses', [EventController::class, 'filterStatuses'])->name('event.filterStatuses');
+    Route::get('/events/{id}/filter', [EventController::class, 'filter'])->name('event.filter');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::put('/events/{id}', [EventController::class, 'update']);
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
-
 
     Route::post('/status', [StatusController::class, 'store'])->name('status.store');
     Route::delete('/status/{id}', [StatusController::class, 'destroy'])->name('status.destroy');
     Route::put('/status/update/{id}', [StatusController::class, 'update']);
     Route::put('/status/updateStatus/{id}', [StatusController::class, 'updateStatus']);
-    Route::get('/status/{id}', [StatusController::class, 'show'])->name('status.show');
-
+    
     Route::get('/users', [RoleController::class, 'index'])->name('users');
+    Route::get('/users/search', [RoleController::class, 'search'])->name('users.search');
     Route::put('/users/{id}', [RoleController::class, 'verify'])->name('users.verify');
     Route::put('/users/update/{id}', [RoleController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [RoleController::class, 'destroy'])->name('users.destroy');
-
+    
+    Route::get('/companies/status/{id}', [StatusController::class, 'show'])->name('status.show');
     Route::get('/companies/getReports/{status_id}', [ReportController::class, 'getReports'])->name('getReports');
     Route::post('/reports/{id}', [ReportController::class, 'store'])->name('reports.store');
 });

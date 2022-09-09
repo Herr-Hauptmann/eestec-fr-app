@@ -88,18 +88,21 @@
         </div>
 
         <div class="col-12 col-md-7 p-5">
-            <div class="col-12 col-md-4">
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="event-select"
-                    onchange='changeAction(this.value)'>
-                    <option id="selection" value="0" selected>Select an event</option>
-                    @foreach ($statuses as $status)
-                        <option value="{{ $status->id }}">{{ $status->event->name }}</option>
-                    @endforeach
-                </select>
+            <div class="row pb-3">
+                <div class="col-12 col-md-6">
+                    <select class="form-select" aria-label=".form-select-lg example" id="event-select"
+                        onchange='changeAction(this.value)'>
+                        <option id="selection" value="0" selected>Select an event</option>
+                        @foreach ($statuses as $status)
+                            <option value="{{ $status->id }}">{{ $status->event->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-md-6" id="contacting-status">
+    
+                </div>
             </div>
-            <div id="contacting-status">
-
-            </div>
+            
             <div class="" id="show-reports">
 
             </div>
@@ -125,7 +128,7 @@
                     url: `status/${status_id}`,
                     method: "GET",
                     success:function(data){
-                        $('#contacting-status').html(data.html);
+                        $('#contacting-status').html(data.prikaz_statusa);
                     }
                 });
             });

@@ -43,8 +43,7 @@
                             {{$event->name}}
                         </div>
                         <div class="col-6 d-flex justify-content-end">
-
-                            <a href="/events/{{$event->id}}" class="btn btn-primary mx-3">View</a>
+                            <a href="/events/{{$event->id}}" class="btn btn-primary mx-3">Manage contacting</a>
                             @if (Gate::allows('manage-events'))
                                 <a href="events/edit/{{$event->id}}" class="btn btn-outline-success  mx-3 @if ($event->is_active == 1)
                                     border-white text-white
@@ -54,7 +53,6 @@
                                     @method('DELETE')
                                 <button type="submit" onclick="return confirm('Are you sure you want to delete {{$event->name}}?')" class="btn btn-danger mx-3">Delete</button>
                                 </form>
-
                             @endif
 
                         </div>

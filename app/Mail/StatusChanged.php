@@ -9,29 +9,29 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Company;
 use App\Models\Event;
 
-class ReportSubmitted extends Mailable
+class StatusChanged extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $content;
     public $event;
     public $company;
     public $userName;
     public $coordinator;
+    public $status;
 
-    public function __construct(String $content, Event $event, Company $company, String $userName, String $coordinator)
+    public function __construct(Event $event, Company $company, String $userName, String $coordinator, String $status)
     {
-        $this->content=$content;
         $this->event=$event;
         $this->company=$company;
         $this->userName = $userName;
         $this->coordinator = $coordinator;
+        $this->status = $status;
     }
 
     public function build()
     {
         return $this->from('fr-app@eestec-sa.ba')
-                    ->subject('[EESTEC]['.$this->event->name.']['.$this->company->name.'] New report')
-                    ->view('emails.report-email');
+                    ->subject('[EESTEC]['.$this->event->name.']['.$this->company->name.'] Contacting status changed to '.$this->status.'!')
+                    ->view('emails.status-email');
     }
 }

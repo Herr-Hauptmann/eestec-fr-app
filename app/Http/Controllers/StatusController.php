@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\StatusChanged;
+use Illuminate\Support\Facades\Mail;
+
 
 class StatusController extends Controller
 {
@@ -72,9 +76,10 @@ class StatusController extends Controller
         if (! Gate::allows('manage-statuses')) {
             abort(403);
         }
-        dd($id);
         $status = Status::find($id);
-        return $status;
+        $userId = Auth::id(); 
+        $html = view('status')->with(compact('status', 'userId'))->render();
+        return response()->json(['success' => true, 'prikaz_statusa' => $html]);
     }
 
     /**
@@ -123,9 +128,17 @@ class StatusController extends Controller
         $editedStatus = Status::find($id);
         $editedStatus->status = $request->status;
         $editedStatus->update();
+
+        $teamLead = $editedStatus->event->teamLeader;
+        $userName = Auth::user()->name;
+        $status = $editedStatus;
+        
+        Mail::to($teamLead)->send(new StatusChanged($status->event, $status->company, $userName, $status->event->teamLeader->name, $status->statusText()));
+
         session()->flash('successMsg','You have successfully updated the status of the task!');
         return back();
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -142,4 +155,6 @@ class StatusController extends Controller
         session()->flash('successMsg','You have successfully deleted the Task!');
         return back();
     }
+
+    
 }

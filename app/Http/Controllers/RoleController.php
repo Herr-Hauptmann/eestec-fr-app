@@ -55,4 +55,17 @@ class RoleController extends Controller
         });
         return view('dashboard', compact('statuses'));
     }
+
+    public function search()
+    {
+        if (! Gate::allows('manage-users')) {
+            abort(403);
+        }
+
+        $search_text = $_GET['user_search'];
+        $users = User::where('name', 'LIKE', '%'.$search_text.'%')->get();
+        $unverified = User::where('role_id', 4)->where('name', 'LIKE', '%'.$search_text.'%')->get();
+
+        return view('users', compact('users', 'unverified'));
+    }
 }

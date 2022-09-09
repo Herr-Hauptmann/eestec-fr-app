@@ -41,7 +41,7 @@ class EventController extends Controller
         if (! Gate::allows('manage-events')) {
             abort(403);
         }
-        $teamLeaders = User::all()->where('role_id', '2')->sortByDesc('id');
+        $teamLeaders = User::select("*")->where('role_id', '2')->orWhere('role_id', '1')->get()->sortByDesc('id');
         return view('events.create', compact('teamLeaders'));
     }
 
@@ -58,7 +58,8 @@ class EventController extends Controller
         }
         $request->validate([
             'name' => 'required|string',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
+            'deadline' => 'required|date|after:tomorrow'
         ]);
 
         $event = new Event();
@@ -69,6 +70,7 @@ class EventController extends Controller
             $event->is_active = 0;
         }
         $event->user_id = $request->user_id;
+        $event->deadline = $request->deadline;
         $event->save();
         $request->session()->flash('successMsg','You have successfully created the event: '.$event->name.'!');
         return redirect('events');
@@ -107,10 +109,8 @@ class EventController extends Controller
             abort(403);
         }
         $event = Event::find($id);
-        $teamLeaders = User::all()->where('role_id', '2')->sortByDesc('id');
+        $teamLeaders = User::select("*")->where('role_id', '2')->orWhere('role_id', '1')->get()->sortByDesc('id');
         return view('events.edit', compact('event', 'teamLeaders'));
-
-
     }
 
     /**
@@ -127,7 +127,8 @@ class EventController extends Controller
         }
         $request->validate([
             'name' => 'required|string',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
+            'deadline' => 'required|date|after:tomorrow'
         ]);
 
         $editedEvent = Event::find($id);
@@ -138,6 +139,7 @@ class EventController extends Controller
             $editedEvent->is_active = 0;
         }
         $editedEvent->user_id = $request->user_id;
+        $editedEvent->deadline = $request->deadline;
         $editedEvent->update();
         $request->session()->flash('successMsg','You have successfully updated the event: '.$request->name.'!');
         return redirect('events');
@@ -152,6 +154,10 @@ class EventController extends Controller
     public function destroy(int $id){
         if (! Gate::allows('manage-events')) {
             abort(403);
+        }
+        $statuses=Status::all()->where('event_id', $id);
+        foreach ($statuses as $status) {
+            $status->delete();
         }
         Event::destroy($id);
         session()->flash('successMsg','You have successfully deleted the event!');
@@ -174,5 +180,39 @@ class EventController extends Controller
         $events = Event::where('name', 'LIKE', '%'.$search_text.'%')->get();
 
         return view('events.index', compact('events'));
+    }
+
+    public function filterStatuses(Request $request, $id) {
+        if (! Gate::allows('manage-statuses')) {
+            abort(403);
+        }
+        $event = Event::find($id);
+        $statuses = Status::all()->where('event_id', $id);
+        $statusCompanies = Status::all()->where('event_id',$id)->map( function($item) {
+            return $item->company->id;
+        });
+        $companies = Company::all()->whereNotIn('id', $statusCompanies);
+        $users = User::all()->where('role_id','<','4')->sortBy('name');
+
+        if($request->filter_status!="0") $statuses=Status::all()->where('status', $request->filter_status);
+
+        return view('events.show', compact('event', 'statuses', 'companies', 'users'));
+    }
+
+    public function filter(Request $request, $id) {
+        if (! Gate::allows('manage-statuses')) {
+            abort(403);
+        }
+        $event = Event::find($id);
+        $statuses = Status::all()->where('event_id', $id);
+        $statusCompanies = Status::all()->where('event_id',$id)->map( function($item) {
+            return $item->company->id;
+        });
+        $companies = Company::all()->whereNotIn('id', $statusCompanies);
+        $users = User::all()->where('role_id','<','4')->sortBy('name');
+
+        if($request->user_id!="0") $statuses=Status::all()->where('user_id', $request->user_id);
+
+        return view('events.show', compact('event', 'statuses', 'companies', 'users'));
     }
 }

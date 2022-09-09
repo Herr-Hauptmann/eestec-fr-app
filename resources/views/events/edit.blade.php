@@ -58,6 +58,15 @@
                     </div>
                 @endif
                 </div>
+                <div class="form-group col-md-6 my-3">
+                    <label for="deadline">Event deadline:</label>
+                <input value="{{ old('deadline') ?? $event->deadline }}" type="date" name="deadline" id="deadline">
+                @if ($errors->first('deadline'))
+                    <div class="alert alert-danger">
+                        {{ $errors->first('deadline') }}
+                    </div>
+                @endif
+                </div>
 
                 <button type="submit" class="btn btn-primary my-1">Save</button>
             </div>

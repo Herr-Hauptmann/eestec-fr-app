@@ -14,6 +14,7 @@ class Event extends Model
         'address',
         'is_active',
         'user_id',
+        'deadline',
     ];
 
     public function teamLeader() {
