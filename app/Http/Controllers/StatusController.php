@@ -129,6 +129,7 @@ class StatusController extends Controller
         return back();
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -144,4 +145,6 @@ class StatusController extends Controller
         session()->flash('successMsg','You have successfully deleted the Task!');
         return back();
     }
+
+    
 }

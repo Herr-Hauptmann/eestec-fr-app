@@ -155,6 +155,10 @@ class EventController extends Controller
         if (! Gate::allows('manage-events')) {
             abort(403);
         }
+        $statuses=Status::all()->where('event_id', $id);
+        foreach ($statuses as $status) {
+            $status->delete();
+        }
         Event::destroy($id);
         session()->flash('successMsg','You have successfully deleted the event!');
         return redirect('events');
@@ -176,5 +180,39 @@ class EventController extends Controller
         $events = Event::where('name', 'LIKE', '%'.$search_text.'%')->get();
 
         return view('events.index', compact('events'));
+    }
+
+    public function filterStatuses(Request $request, $id) {
+        if (! Gate::allows('manage-statuses')) {
+            abort(403);
+        }
+        $event = Event::find($id);
+        $statuses = Status::all()->where('event_id', $id);
+        $statusCompanies = Status::all()->where('event_id',$id)->map( function($item) {
+            return $item->company->id;
+        });
+        $companies = Company::all()->whereNotIn('id', $statusCompanies);
+        $users = User::all()->where('role_id','<','4');
+
+        if($request->filter_status!="0") $statuses=Status::all()->where('status', $request->filter_status);
+
+        return view('events.show', compact('event', 'statuses', 'companies', 'users'));
+    }
+
+    public function filter(Request $request, $id) {
+        if (! Gate::allows('manage-statuses')) {
+            abort(403);
+        }
+        $event = Event::find($id);
+        $statuses = Status::all()->where('event_id', $id);
+        $statusCompanies = Status::all()->where('event_id',$id)->map( function($item) {
+            return $item->company->id;
+        });
+        $companies = Company::all()->whereNotIn('id', $statusCompanies);
+        $users = User::all()->where('role_id','<','4');
+
+        if($request->user_id!="0") $statuses=Status::all()->where('user_id', $request->user_id);
+
+        return view('events.show', compact('event', 'statuses', 'companies', 'users'));
     }
 }

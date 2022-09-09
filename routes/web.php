@@ -52,10 +52,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/events/edit/{id}', [EventController::class, 'edit']);
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
     Route::get('/events/{id}', [EventController::class, 'show']);
+    Route::get('/events/{id}/filterStatuses', [EventController::class, 'filterStatuses'])->name('event.filterStatuses');
+    Route::get('/events/{id}/filter', [EventController::class, 'filter'])->name('event.filter');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::put('/events/{id}', [EventController::class, 'update']);
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
-
 
     Route::post('/status', [StatusController::class, 'store'])->name('status.store');
     Route::delete('/status/{id}', [StatusController::class, 'destroy'])->name('status.destroy');
