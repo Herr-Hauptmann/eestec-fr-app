@@ -194,7 +194,7 @@ class EventController extends Controller
             return $item->company->id;
         });
         $companies = Company::all()->whereNotIn('id', $statusCompanies);
-        $users = User::all()->where('role_id','<','4');
+        $users = User::all()->where('role_id','<','4')->sortBy('name');
 
         if($request->filter_status!="0") $statuses=Status::all()->where('status', $request->filter_status);
 
@@ -211,7 +211,7 @@ class EventController extends Controller
             return $item->company->id;
         });
         $companies = Company::all()->whereNotIn('id', $statusCompanies);
-        $users = User::all()->where('role_id','<','4');
+        $users = User::all()->where('role_id','<','4')->sortBy('name');
 
         if($request->user_id!="0") $statuses=Status::all()->where('user_id', $request->user_id);
 
