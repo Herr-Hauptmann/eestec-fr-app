@@ -6,6 +6,9 @@ use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\StatusChanged;
+use Illuminate\Support\Facades\Mail;
+
 
 class StatusController extends Controller
 {
@@ -125,6 +128,13 @@ class StatusController extends Controller
         $editedStatus = Status::find($id);
         $editedStatus->status = $request->status;
         $editedStatus->update();
+
+        $teamLead = $editedStatus->event->teamLeader;
+        $userName = Auth::user()->name;
+        $status = $editedStatus;
+        
+        Mail::to($teamLead)->send(new StatusChanged($status->event, $status->company, $userName, $status->event->teamLeader->name, $status->statusText()));
+
         session()->flash('successMsg','You have successfully updated the status of the task!');
         return back();
     }
