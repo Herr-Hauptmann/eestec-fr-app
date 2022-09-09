@@ -111,8 +111,6 @@ class EventController extends Controller
         $event = Event::find($id);
         $teamLeaders = User::select("*")->where('role_id', '2')->orWhere('role_id', '1')->get()->sortByDesc('id');
         return view('events.edit', compact('event', 'teamLeaders'));
-
-
     }
 
     /**
