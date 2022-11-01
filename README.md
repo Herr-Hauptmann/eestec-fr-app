@@ -28,7 +28,7 @@ Za pokretanje projekta, u prethodno otvorenom command prompt-u kucajte komandu `
 
 Na samom pocetku ce vam traziti da se login-ate ali trenutno nema korisnika te moramo neke hakerluke da odradimo zbog verifikacije korisnika.
 - Prvo se registrujte na `http://127.0.0.1:8000/register`
-- kljucna rijec je `frapptest`. Kljucnu rijec mozete mijenjati u .env fileu na liniji 6 `APP_KEYWORD="frapptest"`
+- kljucna rijec je `efaraplikacija`. Kljucnu rijec mozete mijenjati u .env fileu na liniji 6 `APP_KEYWORD="efaraplikacija"`
 - aplikacija ce vas preusmjeriti na dashboard ali pise da morate biti verifikovani. Ovo trenutno nije moguce jer nema admina koji vam mogu odobriti pristup ali to mozemo lahko da izmijenimo
 - kroz XAMPP udjite u phpmyadmin (nacin na koji se ovo radi je prethodno objasnjeno). Otvorite **frapp** bazu podataka, tabelu **users**, nadjite sebe i promijenite vrijednost **role_id** sa 4 na 1
 - Sada imate pristup aplikaciji i mozete da radite sta hocete
