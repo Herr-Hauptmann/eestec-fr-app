@@ -32,7 +32,3 @@ Na samom pocetku ce vam traziti da se login-ate ali trenutno nema korisnika te m
 - aplikacija ce vas preusmjeriti na dashboard ali pise da morate biti verifikovani. Ovo trenutno nije moguce jer nema admina koji vam mogu odobriti pristup ali to mozemo lahko da izmijenimo
 - kroz XAMPP udjite u phpmyadmin (nacin na koji se ovo radi je prethodno objasnjeno). Otvorite **frapp** bazu podataka, tabelu **users**, nadjite sebe i promijenite vrijednost **role_id** sa 4 na 1
 - Sada imate pristup aplikaciji i mozete da radite sta hocete
-
-## Disclaimer
-
-Ovo je early build  nije jos u potpunosti testiran. Ako nadjete bug, posaljite mail na [seid.korac@eestec-sa.ba](seid.korac@eestec-sa.ba)
